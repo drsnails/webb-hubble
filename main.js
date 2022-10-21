@@ -8,15 +8,16 @@ let elRoot
 let gIsMouseDown = false
 let gIsTransition = false
 let gImgIdx = 0
+let gZoomLevel = 70
 
 const stellarImgs = [
-    { name: 'pillars', ratio: '256/267', displayName: 'Pillars of Creation' },
-    { name: 'southern', ratio: '175/163', displayName: 'Southern Ring Nebula' },
-    { name: 'tarantula', ratio: '140/81', displayName: 'Tarantula Nebula' },
-    { name: 'carina', ratio: '1400/811', displayName: 'Carina Nebula' },
-    { name: 'cartwheel', ratio: '2800/2577', displayName: 'Cartwheel Galaxy' },
     { name: 'deep_field', ratio: '1399/1428', displayName: 'Deep Field' },
+    { name: 'carina', ratio: '1400/811', displayName: 'Carina Nebula' },
+    { name: 'southern', ratio: '175/163', displayName: 'Southern Ring Nebula' },
+    { name: 'cartwheel', ratio: '2800/2577', displayName: 'Cartwheel Galaxy' },
     { name: 'quintet', ratio: '700/671', displayName: "Stephan's Quintet" },
+    { name: 'tarantula', ratio: '140/81', displayName: 'Tarantula Nebula' },
+    { name: 'pillars', ratio: '256/267', displayName: 'Pillars of Creation' },
 ]
 
 function onInit() {
@@ -98,6 +99,12 @@ function onNextPrevImg(diff) {
     if (gImgIdx === -1) gImgIdx = stellarImgs.length - 1
     localStorage.imgIdx = gImgIdx
     renderImg()
+}
+
+
+function onZoomInOut(diff) {
+    gZoomLevel += diff
+    setCssVarVal('--container-size', gZoomLevel + 'vw')
 }
 
 function getCssVarVal(cssVar) {

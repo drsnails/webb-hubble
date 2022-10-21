@@ -8,7 +8,7 @@ body {
 
 :root {
     --stellar-obj: pillars;
-    --container-size: 90vw;
+    --container-size: 70vw;
     --left-img-width: 50%;
     --drag-cursor: grab;
     --arrows-width: 60px;
@@ -22,11 +22,9 @@ body {
     margin: auto;
     display: flex;
     width: var(--container-size);
-    /* height: var(--container-size); */
-    aspect-ratio: 1399/1428;
-    /* min-width: 800px;
-    max-height: 800px; */
+    aspect-ratio: 1/1;
     margin: 110px auto;
+    padding: 10px;
     cursor: pointer;
 }
 
@@ -91,4 +89,27 @@ h2 {
 
 .btn-next {
     margin-top: 10px;
+}
+
+.zoom-btns {
+    color: white;
+    position: fixed;
+    /* width: 100px;
+    height: 50px; */
+    z-index: 100;
+    
+    bottom: 20px;
+    right: 20px;
+}
+
+.zoom-btns button {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    border-radius: 50%;
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+    cursor: pointer;
+    font-size: 2em;
 }
