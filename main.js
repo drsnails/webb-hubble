@@ -10,13 +10,13 @@ let gIsTransition = false
 let gImgIdx = 0
 
 const stellarImgs = [
-    { name: 'pillars', ratio: '256/267' },
-    { name: 'southern', ratio: '175/163' },
-    { name: 'tarantula', ratio: '140/81' },
-    { name: 'carina', ratio: '1400/811' },
-    { name: 'cartwheel', ratio: '2800/2577' },
-    { name: 'deep_field', ratio: '1399/1428' },
-    { name: 'quintet', ratio: '700/671' },
+    { name: 'pillars', ratio: '256/267', displayName: 'Pillars of Creation' },
+    { name: 'southern', ratio: '175/163', displayName: 'Southern Ring Nebula' },
+    { name: 'tarantula', ratio: '140/81', displayName: 'Tarantula Nebula' },
+    { name: 'carina', ratio: '1400/811', displayName: 'Carina Nebula' },
+    { name: 'cartwheel', ratio: '2800/2577', displayName: 'Cartwheel Galaxy' },
+    { name: 'deep_field', ratio: '1399/1428', displayName: 'Deep Field' },
+    { name: 'quintet', ratio: '700/671', displayName: "Stephan's Quintet" },
 ]
 
 function onInit() {
@@ -65,9 +65,10 @@ function renderImg() {
     const stellarImg = stellarImgs[gImgIdx]
     console.log('gImgIdx:', gImgIdx)
     gElImgContainer.style.aspectRatio = stellarImg.ratio
-    document.querySelector('.hubble-img').style.backgroundImage = `url("../img/${stellarImg.name}/hubble.jpeg")`
-    document.querySelector('.webb-img').style.backgroundImage = `url("../img/${stellarImg.name}/webb.jpeg")`
+    document.querySelector('.hubble-img').style.backgroundImage = `url("img/${stellarImg.name}/hubble.jpeg")`
+    document.querySelector('.webb-img').style.backgroundImage = `url("img/${stellarImg.name}/webb.jpeg")`
     document.querySelector('.page-num').innerText = +gImgIdx + 1
+    document.querySelector('h2:first-of-type').innerText = stellarImg.displayName
 }
 
 
