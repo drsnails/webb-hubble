@@ -8,12 +8,12 @@ let elRoot
 let gIsMouseDown = false
 let gIsTransition = false
 let gImgIdx = 0
-let gZoomLevel = 75
+let gZoomLevel = 65
 let gIsFirst = true
 
 const stellarImgs = [
-    { name: 'deep_field', ratio: '1399/1428', displayName: 'Deep Field' },
     { name: 'carina', ratio: '1400/811', displayName: 'Carina Nebula' },
+    { name: 'deep_field', ratio: '1399/1428', displayName: 'Deep Field' },
     { name: 'southern', ratio: '175/163', displayName: 'Southern Ring Nebula' },
     { name: 'cartwheel', ratio: '2800/2577', displayName: 'Cartwheel Galaxy' },
     { name: 'quintet', ratio: '700/671', displayName: "Stephan's Quintet" },
@@ -44,10 +44,10 @@ function addEventListeners() {
         setCssVarVal('--transition-time', '0.2s')
         gIsTransition = true
         setImgWidth(ev)
-        if (gIsFirst) {
-            gElArrows.style.left = 'calc(var(--left-img-width) - calc(var(--arrows-width) / 2) + 10px)'
-            gIsFirst = false
-        }
+        // if (gIsFirst) {
+        //     gElArrows.style.left = 'calc(var(--left-img-width) - calc(var(--arrows-width) / 2) + 10px)'
+        //     gIsFirst = false
+        // }
 
 
     }
