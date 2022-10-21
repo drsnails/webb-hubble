@@ -6,44 +6,98 @@ let gElDivider
 let gElArrows
 let elRoot
 let gIsMouseDown = false
+let gIsTransition = false
+let gImgIdx = 0
+
+const stellarImgs = [
+    { name: 'pillars', ratio: '256/267' },
+    { name: 'southern', ratio: '175/163' },
+    { name: 'tarantula', ratio: '140/81' },
+    { name: 'carina', ratio: '1400/811' },
+    { name: 'cartwheel', ratio: '2800/2577' },
+    { name: 'deep_field', ratio: '1399/1428' },
+    { name: 'quintet', ratio: '700/671' },
+]
 
 function onInit() {
     gElDragImg = document.querySelector('.hubble-img')
     gElDivider = document.querySelector('.divider')
     gElImgContainer = document.querySelector('.img-container')
     gElArrows = document.querySelector('.arrows')
-    elRoot = document.documentElement
 
-    gElImgContainer.onclick = setImgSideWidth
-    gElImgContainer.onmousedown = setOnMouseDown
-    gElImgContainer.onmouseup = setOnMouseUp
-    gElDivider.onmousedown = setOnMouseDown
-    gElArrows.onmousedown = setOnMouseDown
-    gElDivider.onmouseup = setOnMouseUp
-    gElArrows.onmouseup = setOnMouseUp
+    elRoot = document.documentElement
+    gImgIdx = +localStorage.imgIdx || 0
+    localStorage.imgIdx ??= gImgIdx
+    addEventListeners()
+    renderImg()
+
+
+}
+
+function addEventListeners() {
+
+    gElImgContainer.onmousedown = (ev) => {
+        ev.stopPropagation()
+        setOnMouseDown()
+        setCssVarVal('--transition-time', '0.2s')
+        gIsTransition = true
+        setImgWidth(ev)
+    }
+
 
     document.onmousemove = (ev) => {
-        if (!gIsMouseDown) return
-        setImgSideWidth(ev)
+        let dividerPosX = gElDivider.getBoundingClientRect().x
+        if (ev.x < dividerPosX + 50 && ev.x > dividerPosX - 50) {
+            setCssVarVal('--transition-time', '0s')
+            gIsTransition = false
+        }
+        if (gIsMouseDown && !gIsTransition) {
+            setImgWidth(ev)
+        }
+
     }
+
+    document.onmouseup = setOnMouseUp
+
 }
 
-function setOnMouseDown() {
+function renderImg() {
+    const stellarImg = stellarImgs[gImgIdx]
+    console.log('gImgIdx:', gImgIdx)
+    gElImgContainer.style.aspectRatio = stellarImg.ratio
+    document.querySelector('.hubble-img').style.backgroundImage = `url("../img/${stellarImg.name}/hubble.jpeg")`
+    document.querySelector('.webb-img').style.backgroundImage = `url("../img/${stellarImg.name}/webb.jpeg")`
+    document.querySelector('.page-num').innerText = +gImgIdx + 1
+}
+
+
+function setOnMouseDown(ev) {
     gIsMouseDown = true
     setCssVarVal('--drag-cursor', 'grabbing')
+
 }
 
-function setOnMouseUp() {
+function setOnMouseUp(ev) {
     gIsMouseDown = false
     setCssVarVal('--drag-cursor', 'grab')
 }
 
-function setImgSideWidth(ev) {
+
+function setImgWidth(ev) {
     const imgContainerRect = gElImgContainer.getBoundingClientRect()
-    const containerLeft = ev.x - imgContainerRect.left
-    setCssVarVal('--left-img-width', containerLeft + 'px')
+    let leftImgWidth = ev.x - imgContainerRect.left
+    leftImgWidth = Math.min(leftImgWidth, imgContainerRect.width)
+    leftImgWidth = Math.max(leftImgWidth, 0)
+    setCssVarVal('--left-img-width', leftImgWidth + 'px')
 }
 
+function onNextPrevImg(diff) {
+    gImgIdx += diff
+    if (gImgIdx === stellarImgs.length) gImgIdx = 0
+    if (gImgIdx === -1) gImgIdx = stellarImgs.length - 1
+    localStorage.imgIdx = gImgIdx
+    renderImg()
+}
 
 function getCssVarVal(cssVar) {
     const rootStyle = getComputedStyle(elRoot)

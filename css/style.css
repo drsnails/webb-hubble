@@ -1,97 +1,85 @@
 body {
     margin: 0;
     min-height: 100vh;
+    text-align: center;
 }
 
 :root {
+    --stellar-obj: pillars;
+    --container-size: 90vw;
     --left-img-width: 50%;
-    --container-height: 200px;
-    --container-size: 950px;
     --drag-cursor: grab;
+    --arrows-width: 60px;
+    --transition-time: 0s;
+
 }
 
 .img-container {
-    position: fixed;
+    position: absolute;
     inset: 0;
     margin: auto;
     display: flex;
     width: var(--container-size);
-    height: var(--container-size);
-    min-width: 800px;
-    max-height: 800px;
-    background-color: rebeccapurple;
+    /* height: var(--container-size); */
+    aspect-ratio: 1399/1428;
+    /* min-width: 800px;
+    max-height: 800px; */
+    margin: 50px auto;
+
     cursor: pointer;
 }
 
 .hubble-img {
     background-repeat: no-repeat;
-    background-image: url("../img/hubble.jpeg");
-    background-size: var(--container-size) 100%;
-    height: 100%;
+    background-image: url("../img/deep_field/hubble.jpeg");
+    background-size: var(--container-size) ;
+    /* height: 100%; */
     width: var(--left-img-width);
-    /* transition: width .5s; */
     position: relative;
+    z-index: 1;
+    transition: width var(--transition-time);
 }
 
 .webb-img {
     background-repeat: no-repeat;
-    background-image: url("../img/webb.jpeg");
-    background-size: var(--container-size) 100%;
+    position: absolute;
+    z-index: 0;
     height: 100%;
-    background-position-x: 100%;
-    flex-grow: 1;
+    width: 100%;
+    background-image: url("../img/deep_field/webb.jpeg");
+    background-size: var(--container-size) ;
 }
 
 .divider {
     position: absolute;
     height: 100%;
-    width: 2px;
+    width: 1.5px;
     background-color: white;
     right: -1px;
     cursor: var(--drag-cursor);
 }
 
-:is(.arrows span,.divider)::selection {
+:is(.arrows span, .divider)::selection {
     display: none;
 }
 
 .arrows {
     color: white;
     position: absolute;
-    font-size: 2em;
-    width: 80px;
+    font-size: 1.3em;
+    width: var(--arrows-width);
     display: flex;
-    height: fit-content;
+    height: calc(var(--arrows-width) / 2);
     justify-content: space-between;
-    inset: 0;
-    left: calc(var(--left-img-width) - 40px);
-    top: calc(50vh - 1em);
+    left: calc(var(--left-img-width) - calc(var(--arrows-width) / 2));
+    top: calc(50% - calc(var(--arrows-width) / 4));
     cursor: var(--drag-cursor);
-    
-    /* transition: left .5s; */
-
-
+    line-height: calc(var(--arrows-width) / 2);
+    z-index: 1;
+    transition: left var(--transition-time);
 }
 
-/* .divider:before {
-    content: '<';
-    position: absolute;
-    width: 0;
-    background-color: white;
-    color: white;
-    font-size: 2em;
-    top: calc(50vh - 1em);
-    left: -40px;
-}
 
-.divider:after {
-    content: '>';
-    position: absolute;
-    width: 0;
-    background-color: white;
-    color: white;
-    font-size: 2em;
-    top: calc(50vh - 1em);
-    right: -20px;
-  
-} */
+.btn-next {
+    margin-top: 10px;
+}
