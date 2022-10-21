@@ -8,7 +8,8 @@ let elRoot
 let gIsMouseDown = false
 let gIsTransition = false
 let gImgIdx = 0
-let gZoomLevel = 70
+let gZoomLevel = 75
+let gIsFirst = true
 
 const stellarImgs = [
     { name: 'deep_field', ratio: '1399/1428', displayName: 'Deep Field' },
@@ -43,6 +44,12 @@ function addEventListeners() {
         setCssVarVal('--transition-time', '0.2s')
         gIsTransition = true
         setImgWidth(ev)
+        if (gIsFirst) {
+            gElArrows.style.left = 'calc(var(--left-img-width) - calc(var(--arrows-width) / 2) + 10px)'
+            gIsFirst = false
+        }
+
+
     }
 
 
