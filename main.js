@@ -29,6 +29,7 @@ function onInit() {
     gElArrows = document.querySelector('.arrows')
     gIsMobile = mobileCheck()
     gZoomLevel = gIsMobile ? 99 : 65
+    alert(gZoomLevel)
     elRoot = document.documentElement
     gImgIdx = +localStorage.imgIdx || 0
     localStorage.imgIdx ??= gImgIdx
