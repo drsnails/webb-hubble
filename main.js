@@ -1,5 +1,5 @@
 'use strict'
-
+const gTouchEvs = ['touchstart', 'touchmove', 'touchend']
 let gElImgContainer
 let gElDragImg
 let gElDivider
@@ -38,40 +38,19 @@ function onInit() {
 
 function addEventListeners() {
 
-    gElImgContainer.onmousedown = (ev) => {
-        ev.stopPropagation()
-        setOnMouseDown()
-        setCssVarVal('--transition-time', '0.2s')
-        gIsTransition = true
-        setImgWidth(ev)
-        // if (gIsFirst) {
-        //     gElArrows.style.left = 'calc(var(--left-img-width) - calc(var(--arrows-width) / 2) + 10px)'
-        //     gIsFirst = false
-        // }
-
-
-    }
-
-
-    document.onmousemove = (ev) => {
-        let dividerPosX = gElDivider.getBoundingClientRect().x
-        if (ev.x < dividerPosX + 50 && ev.x > dividerPosX - 50) {
-            setCssVarVal('--transition-time', '0s')
-            gIsTransition = false
-        }
-        if (gIsMouseDown && !gIsTransition) {
-            setImgWidth(ev)
-        }
-
-    }
+    gElImgContainer.onmousedown = onDown
+    gElImgContainer.ontouchstart = onDown
+    
+    document.onmousemove = onMove
+    document.ontouchmove = onMove
 
     document.onmouseup = setOnMouseUp
+    document.ontouchend = setOnMouseUp
 
 }
 
 function renderImg() {
     const stellarImg = stellarImgs[gImgIdx]
-    console.log('gImgIdx:', gImgIdx)
     gElImgContainer.style.aspectRatio = stellarImg.ratio
     document.querySelector('.hubble-img').style.backgroundImage = `url("img/${stellarImg.name}/hubble.jpeg")`
     document.querySelector('.webb-img').style.backgroundImage = `url("img/${stellarImg.name}/webb.jpeg")`
@@ -91,10 +70,31 @@ function setOnMouseUp(ev) {
     setCssVarVal('--drag-cursor', 'grab')
 }
 
+function onDown(ev) {
+    ev.stopPropagation()
+    setOnMouseDown()
+    setCssVarVal('--transition-time', '0.2s')
+    gIsTransition = true
+    setImgWidth(ev)
+}
+
+
+function onMove(ev) {
+    let dividerPosX = gElDivider.getBoundingClientRect().x
+    const evPos = getEvPos(ev)
+    if (evPos.x < dividerPosX + 50 && evPos.x > dividerPosX - 50) {
+        setCssVarVal('--transition-time', '0s')
+        gIsTransition = false
+    }
+    if (gIsMouseDown && !gIsTransition) {
+        setImgWidth(ev)
+    }
+}
 
 function setImgWidth(ev) {
     const imgContainerRect = gElImgContainer.getBoundingClientRect()
-    let leftImgWidth = ev.x - imgContainerRect.left
+    const evPos = getEvPos(ev)
+    let leftImgWidth = evPos.x - imgContainerRect.left
     leftImgWidth = Math.min(leftImgWidth, imgContainerRect.width)
     leftImgWidth = Math.max(leftImgWidth, 0)
     setCssVarVal('--left-img-width', leftImgWidth + 'px')
@@ -112,6 +112,24 @@ function onNextPrevImg(diff) {
 function onZoomInOut(diff) {
     gZoomLevel += diff
     setCssVarVal('--container-size', gZoomLevel + 'vw')
+}
+
+
+
+function getEvPos(ev) {
+    var pos = {
+        x: ev.x,
+        y: ev.y
+    }
+    if (gTouchEvs.includes(ev.type)) {
+        ev.preventDefault()
+        ev = ev.changedTouches[0]
+        pos = {
+            x: ev.pageX - ev.target.offsetLeft,
+            y: ev.pageY - ev.target.offsetTop
+        }
+    }
+    return pos
 }
 
 function getCssVarVal(cssVar) {
